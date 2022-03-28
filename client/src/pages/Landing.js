@@ -1,6 +1,7 @@
 import main from "../assets/images/main-alternative.svg";
 import styled from "styled-components";
 import { Logo } from "../components";
+import { Link } from "react-router-dom";
 
 const Wrapper = styled.main`
 	nav {
@@ -61,7 +62,9 @@ const Landing = () => {
 						90's selfies tacos raw denim tumeric +1 narwhal four
 						loko.
 					</p>
-					<button className="btn btn-hero">Login/Register</button>
+					<Link to="/register" className="btn btn-hero">
+						Login/Register
+					</Link>
 				</div>
 				<img src={main} alt="job hunt" className="img main-img" />
 			</div>
