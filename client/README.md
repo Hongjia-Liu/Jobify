@@ -1,70 +1,224 @@
-# Getting Started with Create React App
+# Client-side Development Log
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project Setup
 
-## Available Scripts
+- `mkdir client` and `cd client`
 
-In the project directory, you can run:
+- `npx create-react-app .`
 
-### `npm start`
+- remove create-react-app boilerplate
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- create `assets` directory in `src/` and add assets
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- `touch .env` and update `.gitignore`
 
-### `npm test`
+- update title in `public/index.html` and replace `favicon.ico` in `public/`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- setup `normalize.css` (`npm install normalize.css`) and `import "normalize.css";` in `src/index.js`
 
-### `npm run build`
+- setup global styles in `index.css`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- create `pages` and `components` directory in `src/`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- install React Router `npm install react-router-dom`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- install styled-components `npm install styled-components`
 
-### `npm run eject`
+- install Prettier `npm install -D prettier` and create config file `echo {}> .prettierrc.json`
+- update `.prettierrc.json` and `package.json`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+  ```json
+  {
+    "tabWidth": 2
+  }
+  ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  ```json
+  "format": "prettier --write \"src/**/*.{js,jsx}\"",
+  "format:check": "prettier --check \"src/**/*.{js,jsx}\""
+  ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Reusable Components
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- create `Logo.js` in `src/components`
 
-## Learn More
+  ```jsx
+  import logo from "../assets/images/logo.svg";
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+  const Logo = () => {
+    return <img src={logo} alt="jobify" className="logo" />;
+  };
+  export default Logo;
+  ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- create `index.js` in `src/components`
 
-### Code Splitting
+  ```jsx
+  import Logo from "./Logo";
+  
+  export { Logo };
+  ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Pages and Routing
 
-### Analyzing the Bundle Size
+- create `Landing.js`, `Dashboard.js`, `Register.js` and `Error.js` in `src/pages`
+- create `index.js` in `src/pages`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+  ```jsx
+  import Dashboard from "./Dashboard";
+  import Landing from "./Landing";
+  import Register from "./Register";
+  import Error from "./Error";
 
-### Making a Progressive Web App
+  export { Dashboard, Landing, Register, Error };
+  ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- setup page routing in `src/App.js`
 
-### Advanced Configuration
+  ```jsx
+  import { Dashboard, Landing, Register, Error } from "./pages";
+  import { BrowserRouter, Routes, Route } from "react-router-dom";
+  
+  function App() {
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/landing" element={<Landing />} />
+          <Route path="*" element={<Error />} />
+        </Routes>
+      </BrowserRouter>
+    );
+  }
+  
+  export default App;
+  ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Landing Page
 
-### Deployment
+Inside `src/pages/Landing.js`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```jsx
+import main from "../assets/images/main-alternative.svg";
+import styled from "styled-components";
+import { Logo } from "../components";
+import { Link } from "react-router-dom";
 
-### `npm run build` fails to minify
+const Wrapper = styled.main`
+  nav {
+    width: var(--fluid-width);
+    max-width: var(--max-width);
+    margin: 0 auto;
+    height: var(--nav-height);
+    display: flex;
+    align-items: center;
+  }
+  .page {
+    min-height: calc(100vh - var(--nav-height));
+    display: grid;
+    align-items: center;
+    margin-top: -3rem;
+  }
+  h1 {
+    font-weight: 700;
+    span {
+      color: var(--primary-500);
+    }
+  }
+  p {
+    color: var(--grey-600);
+  }
+  .main-img {
+    display: none;
+  }
+  @media (min-width: 992px) {
+    .page {
+      grid-template-columns: 1fr 1fr;
+      column-gap: 3rem;
+    }
+    .main-img {
+      display: block;
+    }
+  }
+`;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+const Landing = () => {
+  return (
+    <Wrapper>
+      <nav>
+        <Logo />
+      </nav>
+      <div className="container page">
+        <div className="info">
+          <h1>
+            job <span>tracking</span> app
+          </h1>
+          <p>
+            I'm baby meggings listicle mlkshk narwhal ugh semiotics. Keffiyeh
+            gluten-free flannel selvage. Williamsburg YOLO drinking vinegar,
+            iPhone raclette schlitz twee beard wolf portland post-ironic banh mi
+            single-origin coffee. Enamel pin austin bicycle rights cornhole
+            franzen pour-over squid whatever asymmetrical. Lo-fi tattooed 90's
+            selfies tacos raw denim tumeric +1 narwhal four loko.
+          </p>
+          <Link to="/register" className="btn btn-hero">
+            Login/Register
+          </Link>
+        </div>
+        <img src={main} alt="job hunt" className="img main-img" />
+      </div>
+    </Wrapper>
+  );
+};
+export default Landing;
+```
+
+## Error Page
+
+Inside `src/pages/Error.js`
+```jsx
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import img from "../assets/images/not-found.svg";
+
+const Wrapper = styled.main`
+  text-align: center;
+  img {
+    max-width: 600px;
+    display: block;
+    margin-bottom: 2rem;
+  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  h3 {
+    margin-bottom: 0.5rem;
+  }
+  p {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: var(--grey-500);
+  }
+  a {
+    color: var(--primary-500);
+    text-decoration: underline;
+    text-transform: capitalize;
+  }
+`;
+
+const Error = () => {
+  return (
+    <Wrapper className="full-page">
+      <div>
+        <img src={img} alt="not found" />
+        <h3>Ohh! Page Not Found</h3>
+        <p>We can't seem to find the page you're looking for</p>
+        <Link to="/">Back Home</Link>
+      </div>
+    </Wrapper>
+  );
+};
+export default Error;
+```
+
