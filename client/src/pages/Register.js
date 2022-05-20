@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { Logo } from "../components";
+import { Logo, FormRow } from "../components";
 
 const Wrapper = styled.section`
   display: grid;
@@ -57,19 +57,28 @@ const Register = () => {
       <form className="form" onSubmit={handleSubmit}>
         <Logo />
         <h3>Login</h3>
-        <div className="form-row">
-          <label htmlFor="name" className="form-label">
-            name
-          </label>
-          <input
-            className="form-input"
-            type="text"
-            value={values.name}
-            onChange={handleChange}
-            name="name"
-            id="name"
-          />
-        </div>
+
+        <FormRow
+          type="text"
+          value={values.name}
+          name="name"
+          id="name"
+          onChange={handleChange}
+        />
+        <FormRow
+          type="email"
+          value={values.email}
+          name="email"
+          id="email"
+          onChange={handleChange}
+        />
+        <FormRow
+          type="password"
+          value={values.password}
+          name="password"
+          id="password"
+          onChange={handleChange}
+        />
         <button type="submit" className="btn btn-block">
           Submit
         </button>
