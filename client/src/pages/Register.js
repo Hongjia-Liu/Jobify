@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { Logo, FormRow } from "../components";
+import { Logo, FormRow, Alert } from "../components";
 
 const Wrapper = styled.section`
   display: grid;
@@ -40,6 +40,7 @@ const initialState = {
   email: "",
   password: "",
   isMember: true,
+  showAlert: false,
 };
 
 const Register = () => {
@@ -57,7 +58,7 @@ const Register = () => {
       <form className="form" onSubmit={handleSubmit}>
         <Logo />
         <h3>Login</h3>
-
+        {values.showAlert && <Alert />}
         <FormRow
           type="text"
           value={values.name}
