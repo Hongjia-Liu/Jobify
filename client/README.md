@@ -55,7 +55,7 @@
 
   ```jsx
   import Logo from "./Logo";
-  
+
   export { Logo };
   ```
 
@@ -78,7 +78,7 @@
   ```jsx
   import { Dashboard, Landing, Register, Error } from "./pages";
   import { BrowserRouter, Routes, Route } from "react-router-dom";
-  
+
   function App() {
     return (
       <BrowserRouter>
@@ -91,7 +91,7 @@
       </BrowserRouter>
     );
   }
-  
+
   export default App;
   ```
 
@@ -177,6 +177,7 @@ export default Landing;
 ## Error Page
 
 Inside `src/pages/Error.js`
+
 ```jsx
 import styled from "styled-components";
 import { Link } from "react-router-dom";
@@ -222,3 +223,194 @@ const Error = () => {
 export default Error;
 ```
 
+## Register Page Setup
+
+Inside `src/pages/Register.js`
+
+```jsx
+import styled from "styled-components";
+import { useState } from "react";
+import { Logo, FormRow, Alert } from "../components";
+
+const Wrapper = styled.section`
+  display: grid;
+  align-items: center;
+  .logo {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 1.38rem;
+  }
+  .form {
+    max-width: 400px;
+    border-top: 5px solid var(--primary-500);
+  }
+
+  h3 {
+    text-align: center;
+  }
+  p {
+    margin: 0;
+    margin-top: 1rem;
+    text-align: center;
+  }
+  .btn {
+    margin-top: 1rem;
+  }
+  .member-btn {
+    background: transparent;
+    border: transparent;
+    color: var(--primary-500);
+    cursor: pointer;
+    letter-spacing: var(--letterSpacing);
+  }
+`;
+
+const initialState = {
+  name: "",
+  email: "",
+  password: "",
+  isMember: true,
+  showAlert: false,
+};
+
+const Register = () => {
+  const [values, setValues] = useState(initialState);
+  const handleChange = (e) => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
+  return (
+    <Wrapper className="full-page">
+      <form className="form" onSubmit={handleSubmit}>
+        <Logo />
+        <h3>Login</h3>
+        {values.showAlert && <Alert />}
+        <FormRow />
+        <button type="submit" className="btn btn-block">
+          Submit
+        </button>
+      </form>
+    </Wrapper>
+  );
+};
+export default Register;
+```
+
+## FormRow and Alert component
+
+- create `FormRow.js` in `src/components`
+
+```jsx
+const FormRow = ({ type, name, id, value, handleChange, labelText }) => {
+  return (
+    <div className="form-row">
+      <label htmlFor={name} className="form-label">
+        {labelText || name}
+      </label>
+      <input
+        className="form-input"
+        type={type}
+        value={value}
+        onChange={handleChange}
+        name={name}
+        id={id}
+      />
+    </div>
+  );
+};
+export default FormRow;
+```
+
+- create `Alert.js` in `src/components`
+
+```jsx
+const Alert = () => {
+  return <div className="alert alert-danger">Alert goes here</div>;
+};
+export default Alert;
+```
+
+- update `index.js` in `src/components`
+
+```jsx
+import Logo from "./Logo";
+import FormRow from "./FormRow";
+import Alert from "./Alert";
+
+export { Logo, FormRow, Alert };
+```
+
+- update `Register.js` in `src/pages/Register.js`
+
+```jsx
+const Register = () => {
+  // ...
+  return (
+    // ...
+        {values.showAlert && <Alert />}
+        <FormRow
+          type="text"
+          value={values.name}
+          name="name"
+          id="name"
+          onChange={handleChange}
+        />
+        <FormRow
+          type="email"
+          value={values.email}
+          name="email"
+          id="email"
+          onChange={handleChange}
+        />
+        <FormRow
+          type="password"
+          value={values.password}
+          name="password"
+          id="password"
+          onChange={handleChange}
+        />
+  // ...
+  );
+};
+export default Register;
+```
+
+## toggle Login/Register Form
+
+- update `Register.js` in `src/pages/Register.js`
+
+```jsx
+const Register = () => {
+  // ...
+  const toggleMember = () => {
+    setValues((values) => {
+      return { ...values, isMember: !values.isMember };
+    });
+  };
+  // ...
+  return (
+        // ...
+        <h3>{values.isMember ? "Login" : "Register"}</h3>
+        {values.showAlert && <Alert />}
+        {!values.isMember && (
+          <FormRow
+            type="text"
+            value={values.name}
+            name="name"
+            id="name"
+            onChange={handleChange}
+          />
+        )}
+        // ...
+        <p>
+          {values.isMember ? "Not a member yet?" : "Already a member?"}
+          <button type="button" onClick={toggleMember} className="member-btn">
+            {values.isMember ? "Register" : "Login"}
+          </button>
+        </p>
+        // ...
+  );
+};
+export default Register;
+```
