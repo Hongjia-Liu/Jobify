@@ -414,3 +414,66 @@ const Register = () => {
 };
 export default Register;
 ```
+
+## Global Context
+
+- create `context` directory in `src/`
+- create `reducer.js` in `src/context/`
+
+```jsx
+const reducer = (state, action) => {
+  throw new Error(`no such action : ${action.type}`);
+};
+
+export default reducer;
+```
+
+- create `appContext.js` in `src/context/`
+
+```jsx
+import { useReducer, createContext, useContext } from "react";
+import reducer from "./reducer";
+
+const initialState = {
+  isLoading: false,
+  showAlert: false,
+  alertText: "",
+  alertType: "",
+};
+
+const AppContext = createContext();
+
+const AppProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <AppContext.Provider value={{ ...state }}>{children}</AppContext.Provider>
+  );
+};
+
+const useAppContext = () => {
+  return useContext(AppContext);
+};
+
+export { AppProvider, useAppContext, initialState };
+```
+
+- update `index.js` in `src/`
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "normalize.css";
+import "./index.css";
+import App from "./App";
+import { AppProvider } from "./context/appContext";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <AppProvider>
+      <App />
+    </AppProvider>
+  </React.StrictMode>
+);
+```
