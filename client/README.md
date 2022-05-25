@@ -354,21 +354,21 @@ const Register = () => {
           value={values.name}
           name="name"
           id="name"
-          onChange={handleChange}
+          handleChange={handleChange}
         />
         <FormRow
           type="email"
           value={values.email}
           name="email"
           id="email"
-          onChange={handleChange}
+          handleChange={handleChange}
         />
         <FormRow
           type="password"
           value={values.password}
           name="password"
           id="password"
-          onChange={handleChange}
+          handleChange={handleChange}
         />
   // ...
   );
@@ -399,7 +399,7 @@ const Register = () => {
             value={values.name}
             name="name"
             id="name"
-            onChange={handleChange}
+            handleChange={handleChange}
           />
         )}
         // ...
@@ -476,4 +476,35 @@ root.render(
     </AppProvider>
   </React.StrictMode>
 );
+```
+
+## update Alert component
+
+- update `Alert.js` in `src/components`
+
+```jsx
+const Alert = ({ alertType, alertText }) => {
+  return <div className={`alert alert-${alertType}`}>{alertText}</div>;
+};
+export default Alert;
+```
+
+- update `Register.js` in `src/pages/Register.js`
+
+```jsx
+// ...
+import { useAppContext } from "../context/appContext";
+// ...
+
+const Register = () => {
+  // ...
+  const { showAlert, alertType, alertText } = useAppContext();
+  // ...
+  return (
+    // ...
+      {showAlert && <Alert alertType={alertType} alertText={alertText} />}
+    // ...
+  )
+}
+
 ```

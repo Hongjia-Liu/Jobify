@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { Logo, FormRow, Alert } from "../components";
+import { useAppContext } from "../context/appContext";
 
 const Wrapper = styled.section`
   display: grid;
@@ -40,13 +41,13 @@ const initialState = {
   email: "",
   password: "",
   isMember: true,
-  showAlert: false,
 };
 
 const Register = () => {
   const [values, setValues] = useState(initialState);
   // global state and useNavigate
 
+  const { showAlert, alertType, alertText } = useAppContext();
   const toggleMember = () => {
     setValues((values) => {
       return { ...values, isMember: !values.isMember };
@@ -64,14 +65,14 @@ const Register = () => {
       <form className="form" onSubmit={handleSubmit}>
         <Logo />
         <h3>{values.isMember ? "Login" : "Register"}</h3>
-        {values.showAlert && <Alert />}
+        {showAlert && <Alert alertType={alertType} alertText={alertText} />}
         {!values.isMember && (
           <FormRow
             type="text"
             value={values.name}
             name="name"
             id="name"
-            onChange={handleChange}
+            handleChange={handleChange}
           />
         )}
 
@@ -80,14 +81,14 @@ const Register = () => {
           value={values.email}
           name="email"
           id="email"
-          onChange={handleChange}
+          handleChange={handleChange}
         />
         <FormRow
           type="password"
           value={values.password}
           name="password"
           id="password"
-          onChange={handleChange}
+          handleChange={handleChange}
         />
         <button type="submit" className="btn btn-block">
           Submit
