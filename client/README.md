@@ -275,7 +275,14 @@ const initialState = {
 
 const Register = () => {
   const [values, setValues] = useState(initialState);
-  const handleChange = (e) => {};
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues((values) => {
+      return { ...values, [name]: value };
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -507,4 +514,72 @@ const Register = () => {
   )
 }
 
+```
+
+## action - DISPLAY_ALERT
+
+- create `actions.js` in `src/context/`
+
+```js
+export const DISPLAY_ALERT = "SHOW_ALERT";
+```
+
+- update `reducer.js` in `src/context/`
+
+```jsx
+import { DISPLAY_ALERT } from "./actions";
+
+const reducer = (state, action) => {
+  if (action.type === DISPLAY_ALERT) {
+    return {
+      ...state,
+      showAlert: true,
+      alertType: "danger",
+      alertText: "Please provide all values!",
+    };
+  }
+  throw new Error(`no such action : ${action.type}`);
+};
+
+export default reducer;
+```
+
+- update `appContext.js` in `src/context/`
+
+```jsx
+// ...
+import { DISPLAY_ALERT } from "./actions";
+// ...
+
+const AppProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const displayAlert = () => {
+    dispatch({ type: DISPLAY_ALERT });
+  };
+
+  return (
+    <AppContext.Provider value={{ ...state, displayAlert }}>
+      {children}
+    </AppContext.Provider>
+  );
+};
+
+// ...
+```
+
+- update `Register.js` in `src/pages/Register.js`
+
+```jsx
+// ...
+const { showAlert, alertType, alertText, displayAlert } = useAppContext();
+// ...
+const handleSubmit = (e) => {
+  e.preventDefault();
+  const { name, email, password, isMember } = values;
+  if (!email || !password || (!isMember && !name)) {
+    displayAlert();
+    return;
+  }
+};
 ```

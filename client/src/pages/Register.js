@@ -47,17 +47,27 @@ const Register = () => {
   const [values, setValues] = useState(initialState);
   // global state and useNavigate
 
-  const { showAlert, alertType, alertText } = useAppContext();
+  const { showAlert, alertType, alertText, displayAlert } = useAppContext();
   const toggleMember = () => {
     setValues((values) => {
       return { ...values, isMember: !values.isMember };
     });
   };
 
-  const handleChange = (e) => {};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues((values) => {
+      return { ...values, [name]: value };
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { name, email, password, isMember } = values;
+    if (!email || !password || (!isMember && !name)) {
+      displayAlert();
+      return;
+    }
   };
 
   return (
