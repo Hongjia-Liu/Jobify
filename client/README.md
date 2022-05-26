@@ -583,3 +583,50 @@ const handleSubmit = (e) => {
   }
 };
 ```
+
+## action - CLEAR_ALERT
+
+- update `actions.js` in `src/context/`
+
+```js
+// ...
+export const CLEAR_ALERT = "CLEAR_ALERT";
+```
+
+- update `reducer.js` in `src/context/`
+
+```jsx
+import { DISPLAY_ALERT, CLEAR_ALERT } from "./actions";
+
+// ...
+if (action.type === CLEAR_ALERT) {
+  return {
+    ...state,
+    showAlert: false,
+    alertType: "",
+    alertText: "",
+  };
+}
+// ...
+```
+
+- update `appContext.js` in `src/context/`
+
+```jsx
+// ...
+import { DISPLAY_ALERT, CLEAR_ALERT } from "./actions";
+// ...
+
+const displayAlert = () => {
+  dispatch({ type: DISPLAY_ALERT });
+  clearAlert();
+};
+
+const clearAlert = () => {
+  setTimeout(() => {
+    dispatch({ type: CLEAR_ALERT });
+  }, 3000);
+};
+
+// ...
+```
