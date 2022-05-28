@@ -47,7 +47,7 @@ app.listen(port, () => {
 });
 ```
 
-## notFoundMiddleware middleware
+## Not Found Middleware
 
 - create `middleware` directory in the root directory
 - create `not-found.js` in `Jobify/middleware/`
@@ -71,4 +71,31 @@ app.get("/", (req, res) => {
 });
 
 app.use(notFoundMiddleware);
+```
+
+## Error Middleware
+
+- create `error-handler.js` in `Jobify/middleware/`
+
+```js
+const errorHandlerMiddleware = (err, req, res, next) => {
+  res.status(500).json({ msg: "There was an error" });
+};
+
+export default errorHandlerMiddleware;
+```
+
+- update `server.js`
+
+```js
+// middleware
+import notFoundMiddleware from "./middleware/not-found.js";
+import errorHandlerMiddleware from "./middleware/error-handler.js";
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 ```
