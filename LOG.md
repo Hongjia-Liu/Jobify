@@ -46,3 +46,29 @@ app.listen(port, () => {
   console.log(`Server is listening on port ${port}...`);
 });
 ```
+
+## notFoundMiddleware middleware
+
+- create `middleware` directory in the root directory
+- create `not-found.js` in `Jobify/middleware/`
+
+```js
+const notFoundMiddleware = (req, res) => {
+  res.status(404).send("Route does not exist");
+};
+
+export default notFoundMiddleware;
+```
+
+- update `server.js`
+
+```js
+// middleware
+import notFoundMiddleware from "./middleware/not-found.js";
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+app.use(notFoundMiddleware);
+```
