@@ -99,3 +99,14 @@ app.get("/", (req, res) => {
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 ```
+
+## `.env`
+
+- install dotenv `npm install dotenv`
+- inside `server.js`, add
+  ```js
+  import dotenv from "dotenv";
+  dotenv.config();
+  ```
+- create `.env`, add `PORT=4000`, add `.env` to `.gitignore`
+- create `.env.example`

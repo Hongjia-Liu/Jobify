@@ -1,5 +1,7 @@
 import express from "express";
 const app = express();
+import dotenv from "dotenv";
+dotenv.config(); // Loads .env file contents into process.env.
 
 // middleware
 import notFoundMiddleware from "./middleware/not-found.js";
