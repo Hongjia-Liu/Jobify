@@ -108,5 +108,43 @@ app.use(errorHandlerMiddleware);
   import dotenv from "dotenv";
   dotenv.config();
   ```
-- create `.env`, add `PORT=4000`, add `.env` to `.gitignore`
+- create `.env`, add `PORT=5000`, add `.env` to `.gitignore`
 - create `.env.example`
+
+## Connect to MongoDB Atlas
+
+- install mongoose `npm install mongoose`
+- create `db` directory in the root directory
+- create `connect.js` in `./db`
+
+  ```js
+  import mongoose from "mongoose";
+
+  const connectDB = (url) => {
+    return mongoose.connect(url);
+  };
+
+  export default connectDB;
+  ```
+
+- get the MongoDB connection string
+- setup `MONGO_URL` in `.env`
+- update `server.js`
+
+  ```js
+  // ...
+  import connectDB from "./db/connect.js";
+  // ...
+  const start = async () => {
+    try {
+      await connectDB(process.env.MONGO_URL);
+      app.listen(port, () => {
+        console.log(`Server is listening on port ${port}...`);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  start();
+  ```
